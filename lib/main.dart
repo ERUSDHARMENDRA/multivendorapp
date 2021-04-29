@@ -18,7 +18,8 @@ void main() async {
           create: (_)=> AuthProvider(),
         ),
       ],
-  ));
+    child: MyApp(),
+  ),);
 }
 
 class MyApp extends StatelessWidget {
