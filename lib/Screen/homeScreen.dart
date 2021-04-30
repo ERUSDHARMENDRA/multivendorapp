@@ -5,6 +5,8 @@ import 'package:shapeyou/Screen/welcome_screen.dart';
 import 'package:shapeyou/provider/auth_provider.dart';
 
 class HomeScreen extends StatelessWidget {
+  static const String id = 'home-screen';
+
   @override
   Widget build(BuildContext context) {
     final auth = Provider.of<AuthProvider>(context);
@@ -15,7 +17,7 @@ class HomeScreen extends StatelessWidget {
           child: Text('Sign Out'),
         ),
         onPressed: (){
-          auth.error = '';
+          auth.error = '' ;
 
           FirebaseAuth.instance.signOut().then((value){
             Navigator.push(context, MaterialPageRoute(

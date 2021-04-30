@@ -4,6 +4,8 @@ import 'package:shapeyou/Screen/onboard_screen.dart';
 import 'package:shapeyou/provider/auth_provider.dart';
 
 class WelcomeScreen extends StatelessWidget {
+  static const String id = 'welcome-screen';
+
   @override
   Widget build(BuildContext context) {
     final auth = Provider.of<AuthProvider>(context);

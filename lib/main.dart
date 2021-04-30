@@ -7,6 +7,8 @@ import 'package:shapeyou/Screen/welcome_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:shapeyou/provider/auth_provider.dart';
 
+import 'Screen/splash_screen.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
@@ -28,53 +30,16 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primaryColor: Colors.deepOrangeAccent,
       ),
-      home: SplashScreen(),
+     initialRoute: SplashScreen.id,
+      routes: {
+        SplashScreen.id:(context)=>SplashScreen(),
+        HomeScreen.id:(context)=> HomeScreen(),
+        WelcomeScreen.id:(context)=>WelcomeScreen(),
+      },
       debugShowCheckedModeBanner: false,
     );
   }
 }
 
-class SplashScreen extends StatefulWidget {
-  @override
-  _SplashScreenState createState() => _SplashScreenState();
-}
-
-class _SplashScreenState extends State<SplashScreen> {
-
-  @override
-void initState() {
-    Timer(
-      Duration(
-        seconds: 3,
-      ),(){
-       FirebaseAuth.instance.authStateChanges().listen((User user) {
-         if (user==null) {
-           Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>WelcomeScreen(),
-           ));
-         }else{
-           Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>HomeScreen(),
-           ));
-         }
-       });
-    }
-    );
-    // TODO: implement initState
-    super.initState();
-  }
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-          Image.asset('images/shapeyou_logo.png'),
-          Text("Let's Shape You", style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),),
-            ],
-      ),
-     ),
-    );
-  }
-}
 
 
