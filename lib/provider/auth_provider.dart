@@ -98,11 +98,12 @@ class AuthProvider with ChangeNotifier{
                     }
                   } catch (e) {
                     this.error = 'Invalid OTP ';
+                    notifyListeners();
                     print(e.toString());
                     Navigator.of(context).pop();
                   }
                 },
-                child: Text('DONE'),
+                child: Text('DONE', style: TextStyle(color: Theme.of(context).primaryColor),),
               ),
             ],
           );
