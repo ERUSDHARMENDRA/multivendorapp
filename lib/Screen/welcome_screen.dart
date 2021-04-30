@@ -24,7 +24,7 @@ class WelcomeScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Visibility(
-                      visible: auth.error == 'Invalid OTP' ? false : true,
+                      visible: auth.error == 'Invalid OTP' ? true : false,
                       child: Container(
                         child: Column(
                           children: [
