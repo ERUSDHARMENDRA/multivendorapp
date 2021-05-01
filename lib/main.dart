@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shapeyou/Screen/homeScreen.dart';
+import 'package:shapeyou/Screen/login_screen.dart';
 import 'package:shapeyou/Screen/map_screen.dart';
 import 'package:shapeyou/Screen/welcome_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -40,6 +41,7 @@ class MyApp extends StatelessWidget {
         HomeScreen.id:(context)=> HomeScreen(),
         WelcomeScreen.id:(context)=>WelcomeScreen(),
         MapScreen.id:(context)=>MapScreen(),
+        LoginScreen.id:(context)=>LoginScreen(),
       },
       debugShowCheckedModeBanner: false,
     );

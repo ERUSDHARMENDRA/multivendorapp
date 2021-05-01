@@ -1,7 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shapeyou/Screen/homeScreen.dart';
+import 'package:shapeyou/provider/location_provider.dart';
 import 'package:shapeyou/services/user_services.dart';
 
 class AuthProvider with ChangeNotifier{
@@ -10,23 +12,33 @@ class AuthProvider with ChangeNotifier{
   String verificationId;
   String error = '';
   UserServices _userServices = UserServices();
+  bool loading = false;
+  LocationProvider locationData = LocationProvider();
 
-  Future<void> verifyPhone(BuildContext context, String number) async {
+  Future<void> verifyPhone({BuildContext context, String number, double latitude, double longitude, String address}) async {
+    this.loading=true;
+    notifyListeners();
+
     final PhoneVerificationCompleted verificationCompleted =
         (PhoneAuthCredential credential) async {
+      this.loading=false;
+      notifyListeners();
       await _auth.signInWithCredential(credential);
     };
 
     final PhoneVerificationFailed verificationFailed =
         (FirebaseAuthException e) {
+      this.loading=false;
       print(e.code);
+      this.error = e.toString();
+      notifyListeners();
     };
 
     final PhoneCodeSent smsOtpSend = (String verId, int resendToken) async {
       this.verificationId = verId;
 
       // dialog to enter otp
-      smsOtpDialog(context, number);
+      smsOtpDialog(context, number, latitude, longitude, address);
     };
 
     try {
@@ -39,11 +51,13 @@ class AuthProvider with ChangeNotifier{
             this.verificationId = verId;
           });
     } catch (e) {
+      this.error=e.toString();
+      notifyListeners();
       print(e);
     }
   }
 
-  Future<bool> smsOtpDialog(BuildContext context, String number) {
+  Future<bool> smsOtpDialog(BuildContext context, String number, double latitude, double longitude, String address) {
     return showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -82,8 +96,13 @@ class AuthProvider with ChangeNotifier{
                     final User user =
                         (await _auth.signInWithCredential(phoneAuthCredential))
                             .user;
-                    //create user data in firestore after user sucessfully registered,
-                    _createUser(id: user.uid, number: user.phoneNumber);
+                    if (locationData.selectedAddress!=null) {
+                      updateUser(id: user.uid, number: user.phoneNumber, latitude: locationData.latitude, longitude: locationData.longitude, address: locationData.selectedAddress.address);
+                    }  else{
+                      //create user data in firestore after user sucessfully registered,
+                      _createUser(id: user.uid, number: user.phoneNumber, latitude:latitude, longitude: longitude, address: address);
+
+                    }
 
                     //navigate to homepage after login.
                     if (user != null) {
@@ -108,10 +127,28 @@ class AuthProvider with ChangeNotifier{
         });
   }
 
-  void _createUser({String id, String number}) {
+  void _createUser({String id, String number, double latitude, double longitude, String address}) {
     _userServices.createUserData({
       'id': id,
       'number': number,
+      'latitude':latitude,
+      'longitude':longitude,
+      'address' : address,
     });
+    this.loading=false;
+    notifyListeners();
+  }
+
+
+  void updateUser({String id, String number, double latitude, double longitude, String address}) {
+    _userServices.updateUserData({
+      'id': id,
+      'number': number,
+      'latitude':latitude,
+      'longitude':longitude,
+      'address' : address,
+    });
+    this.loading=false;
+    notifyListeners();
   }
 }
