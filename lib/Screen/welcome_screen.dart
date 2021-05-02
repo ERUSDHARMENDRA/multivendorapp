@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shapeyou/Screen/onboard_screen.dart';
@@ -108,7 +106,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               String number =
               '+91${_phoneNumberController.text}';
               //we don't have locationData here so we send null value
-              auth.verifyPhone(context:context, number:number, latitude: null, longitude: null, address: null).then((value) {
+              auth.verifyPhone(context:context, number:number).then((value) {
               _phoneNumberController.clear();
               auth.loading=false;
 
@@ -132,7 +130,10 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               ),
           );
         }),
-      );
+      ).whenComplete((){
+        auth.loading=false;
+        _phoneNumberController.clear();
+      });
     }
 
     final locationData = Provider.of<LocationProvider>(context, listen: false);
@@ -148,7 +149,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               child: FlatButton(
                 child: Text(
                   'SKIP',
-                  style: TextStyle(color: Colors.deepOrangeAccent),
+                  style: TextStyle(color: Theme.of(context).primaryColor),
                 ),
                 onPressed: () {},
               ),
@@ -163,10 +164,10 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   style: TextStyle(color: Colors.grey),
                 ),
                 SizedBox(
-                  height: 20.0,
+                  height: 10.0,
                 ),
                 FlatButton(
-                  color: Colors.deepOrangeAccent,
+                  color: Theme.of(context).primaryColor,
                   child: locationData.loading?CircularProgressIndicator(
                     valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                   ):Text(
@@ -177,6 +178,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                     setState(() {
                       locationData.loading=true;
                     });
+
                  await locationData.getCurrentPosition();
                  if (locationData.permissionAllowed==false) {
                    Navigator.pushReplacementNamed(context, MapScreen.id);
@@ -186,6 +188,11 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                  }else{
                    print('Permission not allowed');
                  }
+                 setState(() {
+                   locationData.loading=false;
+                 });
+
+
                   },
                 ),
                 FlatButton(
@@ -206,6 +213,9 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                     ),
                   ),
                   onPressed: () {
+                    setState(() {
+                      auth.screen='Login';
+                    });
                     showBottomSheet(context);
                   },
                 ),

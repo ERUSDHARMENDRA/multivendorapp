@@ -97,14 +97,12 @@ class _MapScreenState extends State<MapScreen> {
                     color: Colors.white,
                   ),
                 ),
-
                 Center(
                   child: SpinKitPulse(
                     color: Theme.of(context).primaryColor,
                     size: 100.0,
                   ),
                 ),
-
                 Positioned(
                   bottom: 0.0,
                   child: Container(
@@ -163,20 +161,25 @@ class _MapScreenState extends State<MapScreen> {
                                 absorbing: _locating ? true : false,
                                 child: FlatButton(
                                   onPressed: () {
+                                    //save address in Shared Preferences
+                                    locationData.savePrefs();
                                     if (_loggedIn == false) {
                                       Navigator.pushNamed(
                                           context, LoginScreen.id);
                                     } else {
-                                      _auth.updateUser(
-                                        id: user.uid,
-                                        number: user.phoneNumber,
-                                        latitude: locationData.latitude,
-                                        longitude: locationData.longitude,
-                                        address: locationData
-                                            .selectedAddress.addressLine,
-                                      );
-
+                                      setState(() {
+                                        _auth.latitude = locationData.latitude;
+                                        _auth.longitude =
+                                            locationData.longitude;
+                                        _auth.address = locationData
+                                            .selectedAddress.addressLine;
+                                      });
                                     }
+                                    _auth.updateUser(
+                                      id: user.uid,
+                                      number: user.phoneNumber,
+                                    );
+                                    Navigator.pushNamed(context, HomeScreen.id);
                                   },
                                   color: _locating
                                       ? Colors.grey

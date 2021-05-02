@@ -25,6 +25,8 @@ dependencies:
   google_maps_flutter: ^1.0.6
   geocoder: ^0.2.1
   flutter_spinkit: ^4.1.2+1
+  shared_preferences: ^0.5.12+4
+  carousel_slider: ^2.3.1
 
 dev_dependencies:
   flutter_test:
@@ -39,3 +41,15 @@ flutter:
 
   assets:
     - images/
+
+  fonts:
+    - family: Lato
+      fonts:
+        - asset: fonts/Lato-Bold.ttf
+          weight: 700
+        - asset: fonts/Lato-Regular.ttf
+
+    - family: Anton
+      fonts:
+        - asset: fonts/Anton-Regular.ttf
+

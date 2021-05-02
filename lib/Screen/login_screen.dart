@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shapeyou/Screen/homeScreen.dart';
 import 'package:shapeyou/provider/auth_provider.dart';
 import 'package:shapeyou/provider/location_provider.dart';
 
@@ -99,6 +98,10 @@ class _LoginScreenState extends State<LoginScreen> {
 
     setState((){
     auth.loading= true;
+    auth.screen = 'MapScreen';
+    auth.latitude=locationData.latitude;
+    auth.longitude=locationData.longitude;
+    auth.address=locationData.selectedAddress.addressLine;
     });
 
     String number =
@@ -106,16 +109,15 @@ class _LoginScreenState extends State<LoginScreen> {
     auth.verifyPhone(
     context: context,
     number: number,
-    latitude: locationData.latitude,
-    longitude: locationData.longitude,
-    address: locationData.selectedAddress.addressLine,
+      // latitude: locationData.latitude,
+      // longitude: locationData.longitude,
+      // address: locationData.selectedAddress.addressLine,
     ).then((value) {
     _phoneNumberController.clear();
     setState(() {
-        auth.loading=false; // to disable circularprogressbar
+        auth.loading=false; // to disable circular progressbar
     });
     });
-    Navigator.pushNamed(context, HomeScreen.id);
     },
     color: _validPhoneNumber ? Theme.of(context).primaryColor : Colors.grey,
     child: auth.loading?CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Colors.white),):Text(_validPhoneNumber ? 'CONTINUE' : 'ENTER PHONE NUMBER',
