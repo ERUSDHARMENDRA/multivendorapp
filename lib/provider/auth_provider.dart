@@ -111,8 +111,9 @@ class AuthProvider with ChangeNotifier {
                           if (this.screen == 'Login') {
                             //need to check user data already exists in db or not
                             //if exists, no new data, so no need to update
-                            if (snapShot.data()['address']!=null) {
-                              Navigator.pushReplacementNamed(context, HomeScreen.id);
+                            if (snapShot.data()['address'] != null) {
+                              Navigator.pushReplacementNamed(
+                                  context, HomeScreen.id);
                             }
                             Navigator.pushReplacementNamed(
                                 context, LandingScreen.id);
