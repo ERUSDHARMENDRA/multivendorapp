@@ -18,7 +18,7 @@ class MapScreen extends StatefulWidget {
 }
 
 class _MapScreenState extends State<MapScreen> {
-  LatLng currentLocation;
+  LatLng currentLocation = LatLng(37.421632, 122.084664);
   GoogleMapController _mapController;
   bool _locating = false;
   bool _loggedIn = false;
@@ -133,8 +133,10 @@ class _MapScreenState extends State<MapScreen> {
                                 child: Text(
                                   _locating
                                       ? ('Locating....')
-                                      : locationData
-                                          .selectedAddress.featureName,
+                                      : locationData.selectedAddress == null
+                                          ? 'Locating....'
+                                          : locationData
+                                              .selectedAddress.featureName,
                                   overflow: TextOverflow.ellipsis,
                                   style: TextStyle(
                                       fontWeight: FontWeight.bold,
@@ -149,7 +151,10 @@ class _MapScreenState extends State<MapScreen> {
                             child: Text(
                               _locating
                                   ? ''
-                                  : locationData.selectedAddress.addressline,
+                                  : locationData.selectedAddress == null
+                                      ? ''
+                                      : locationData
+                                          .selectedAddress.addressline,
                               style: TextStyle(color: Colors.black54),
                             ),
                           ),
@@ -173,6 +178,8 @@ class _MapScreenState extends State<MapScreen> {
                                             locationData.longitude;
                                         _auth.address = locationData
                                             .selectedAddress.addressLine;
+                                        _auth.address = locationData
+                                            .selectedAddress.featureName;
                                       });
                                     }
                                     _auth.updateUser(

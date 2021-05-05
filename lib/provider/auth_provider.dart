@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shapeyou/Screen/homeScreen.dart';
+import 'package:shapeyou/Screen/landing_screen.dart';
 import 'package:shapeyou/provider/location_provider.dart';
 import 'package:shapeyou/services/user_services.dart';
 
@@ -17,6 +18,7 @@ class AuthProvider with ChangeNotifier {
   double latitude;
   double longitude;
   String address;
+  String location;
 
   Future<void> verifyPhone({BuildContext context, String number}) async {
     this.loading = true;
@@ -101,7 +103,7 @@ class AuthProvider with ChangeNotifier {
                         (await _auth.signInWithCredential(phoneAuthCredential))
                             .user;
                     if (user != null) {
-                      this.loading=false;
+                      this.loading = false;
                       notifyListeners();
                       _userServices.getUserById(user.uid).then((snapShot) {
                         if (snapShot.exists) {
@@ -109,22 +111,27 @@ class AuthProvider with ChangeNotifier {
                           if (this.screen == 'Login') {
                             //need to check user data already exists in db or not
                             //if exists, no new data, so no need to update
-                            Navigator.pushReplacementNamed(context, HomeScreen.id);
-
+                            if (snapShot.data()['address']!=null) {
+                              Navigator.pushReplacementNamed(context, HomeScreen.id);
+                            }
+                            Navigator.pushReplacementNamed(
+                                context, LandingScreen.id);
                           } else {
                             //need to update new selected address
                             updateUser(id: user.uid, number: user.phoneNumber);
-                            Navigator.pushReplacementNamed(context, HomeScreen.id);
+                            Navigator.pushReplacementNamed(
+                                context, HomeScreen.id);
                           }
                         } else {
                           //user doesn't exists
                           //will create new data in db
-                           print('${locationData.latitude}:${locationData.longitude}');
+                          print(
+                              '${locationData.latitude}:${locationData.longitude}');
                           _createUser(id: user.uid, number: user.phoneNumber);
-                          Navigator.pushReplacementNamed(context, HomeScreen.id);
+                          Navigator.pushReplacementNamed(
+                              context, LandingScreen.id);
                         }
                       });
-
                     } else {
                       print('Login Failed');
                     }
@@ -143,8 +150,8 @@ class AuthProvider with ChangeNotifier {
             ],
           );
         }).whenComplete(() {
-          this.loading=false;
-          notifyListeners();
+      this.loading = false;
+      notifyListeners();
     });
   }
 
@@ -155,25 +162,25 @@ class AuthProvider with ChangeNotifier {
       'latitude': this.latitude,
       'longitude': this.longitude,
       'address': this.address,
+      'location': this.location,
     });
     this.loading = false;
     notifyListeners();
   }
 
-  void updateUser(
-      {String id,
-      String number}) async {
-    try{
+  void updateUser({String id, String number}) async {
+    try {
       _userServices.updateUserData({
         'id': id,
         'number': number,
         'latitude': this.latitude,
         'longitude': this.longitude,
         'address': this.address,
+        'location': this.location,
       });
       this.loading = false;
       notifyListeners();
-    }catch(e){
+    } catch (e) {
       print('Error $e');
     }
   }
