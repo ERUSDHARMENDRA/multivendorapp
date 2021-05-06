@@ -42,7 +42,7 @@ class MyApp extends StatelessWidget {
         primaryColor: Color(0xFF84c225),
         fontFamily: 'Lato',
       ),
-      initialRoute: SplashScreen.id,
+      initialRoute: HomeScreen.id,
       routes: {
         SplashScreen.id: (context) => SplashScreen(),
         HomeScreen.id: (context) => HomeScreen(),

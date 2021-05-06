@@ -2,19 +2,24 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:paginate_firestore/bloc/pagination_listeners.dart';
+import 'package:paginate_firestore/paginate_firestore.dart';
 import 'package:provider/provider.dart';
 import 'package:shapeyou/provider/store_provider.dart';
 import 'package:shapeyou/services/store_services.dart';
+import 'package:shapeyou/widgets/constants.dart';
 
-class NearbyStore extends StatefulWidget {
+class NearbyStores extends StatefulWidget {
   static const String id = 'near-by-store';
 
   @override
-  _NearbyStoreState createState() => _NearbyStoreState();
+  _NearbyStoresState createState() => _NearbyStoresState();
 }
 
-class _NearbyStoreState extends State<NearbyStore> {
+class _NearbyStoresState extends State<NearbyStores> {
   StoreServices _storeServices = StoreServices();
+  PaginateRefreshedChangeListener refreshedChangeListener =
+      PaginateRefreshedChangeListener();
 
   @override
   Widget build(BuildContext context) {
@@ -29,8 +34,9 @@ class _NearbyStoreState extends State<NearbyStore> {
     }
 
     return Container(
+      color: Colors.white,
       child: StreamBuilder<QuerySnapshot>(
-        stream: _storeServices.getTopPickedStore(), //will change it soon
+        stream: _storeServices.getNearbyStore(), //will change it soon
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapShot) {
           if (!snapShot.hasData) return CircularProgressIndicator();
           List shopDistance = [];
@@ -45,14 +51,252 @@ class _NearbyStoreState extends State<NearbyStore> {
           }
           shopDistance.sort(); // this will sort with nearby location
           if (shopDistance[0] > 10) {
-            return Container();
+            return Container(
+              color: Colors.red,
+              child: Stack(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(
+                        top: 30, bottom: 30, right: 20, left: 20),
+                    child: Container(
+                      width: MediaQuery.of(context).size.width,
+                      child: Center(
+                        child: Text(
+                          'Currently we are not servicing in your area.\nPlease try later or try another location',
+                          textAlign: TextAlign.left,
+                          style: TextStyle(
+                            color: Colors.black54,
+                            fontSize: 20,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 40,
+                  ),
+                  Image.asset(
+                    'images/city.png',
+                    color: Colors.black12,
+                  ),
+                  Positioned(
+                    right: 10.0,
+                    top: 80,
+                    child: Container(
+                        width: 100,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Made by: ',
+                              style: TextStyle(
+                                color: Colors.black54,
+                              ),
+                            ),
+                            Text(
+                              'KODEMAFIA',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontFamily: 'Anton',
+                                  letterSpacing: 2,
+                                  color: Colors.grey),
+                            )
+                          ],
+                        )),
+                  ),
+                ],
+              ),
+            );
           }
 
           return Padding(
             padding: EdgeInsets.all(8.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: [],
+              children: [
+                RefreshIndicator(
+                  child: PaginateFirestore(
+                    bottomLoader: SizedBox(
+                      height: 30,
+                      width: 30,
+                      child: CircularProgressIndicator(
+                        valueColor: AlwaysStoppedAnimation<Color>(
+                            Theme.of(context).primaryColor),
+                      ),
+                    ),
+                    header: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding:
+                              const EdgeInsets.only(left: 8, right: 8, top: 20),
+                          child: Text(
+                            'All Nearby Stores',
+                            style: TextStyle(
+                                fontWeight: FontWeight.w900, fontSize: 18),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(
+                              left: 8, right: 8, bottom: 10),
+                          child: Text(
+                            'Find Out quality products near you',
+                            style: TextStyle(fontSize: 12, color: Colors.grey),
+                          ),
+                        ),
+                      ],
+                    ),
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    itemBuilderType: PaginateBuilderType.listView,
+                    itemBuilder: (index, context, document) => Padding(
+                      padding: const EdgeInsets.all(4),
+                      child: Container(
+                        width: MediaQuery.of(context).size.width,
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            SizedBox(
+                              width: 100,
+                              height: 110,
+                              child: Card(
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(4),
+                                  child: Image.network(
+                                    document['imageUrl'],
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Column(
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Container(
+                                  child: Text(
+                                    document.data()['shopName'],
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 3,
+                                ),
+                                Text(
+                                  document.data()['dialog'],
+                                  style: kstoreCartStyle,
+                                ),
+                                SizedBox(
+                                  height: 3,
+                                ),
+                                Container(
+                                  width:
+                                      MediaQuery.of(context).size.width - 250,
+                                  child: Text(
+                                    document.data()['address'],
+                                    overflow: TextOverflow.ellipsis,
+                                    style: kstoreCartStyle,
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 3,
+                                ),
+                                Text(
+                                  '${getDistance(document['location'])}Km',
+                                  overflow: TextOverflow.ellipsis,
+                                  style: kstoreCartStyle,
+                                ),
+                                SizedBox(
+                                  height: 3,
+                                ),
+                                Row(
+                                  //this is to rating ...will work later on
+                                  children: [
+                                    Icon(
+                                      Icons.star,
+                                      size: 12,
+                                      color: Colors.grey,
+                                    ),
+                                    SizedBox(
+                                      width: 4,
+                                    ),
+                                    Text(
+                                      '3.2',
+                                      style: kstoreCartStyle,
+                                    )
+                                  ],
+                                )
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    query: _storeServices.getNearbyStorePagination(),
+                    listeners: [
+                      refreshedChangeListener,
+                    ],
+                    footer: Padding(
+                      padding: const EdgeInsets.only(top: 30),
+                      child: Container(
+                        child: Stack(
+                          children: [
+                            Center(
+                              child: Text(
+                                '**That\s all folks**',
+                                style: TextStyle(
+                                  color: Colors.grey,
+                                ),
+                              ),
+                            ),
+                            Image.asset(
+                              'images/city.png',
+                              color: Colors.black12,
+                            ),
+                            Positioned(
+                              right: 10.0,
+                              top: 80,
+                              child: Container(
+                                  width: 100,
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        'Made by: ',
+                                        style: TextStyle(
+                                          color: Colors.black54,
+                                        ),
+                                      ),
+                                      Text(
+                                        'KODEMAFIA',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: 'Anton',
+                                            letterSpacing: 2,
+                                            color: Colors.grey),
+                                      )
+                                    ],
+                                  )),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  onRefresh: () async {
+                    refreshedChangeListener.refreshed = true;
+                  },
+                ),
+              ],
             ),
           );
         },

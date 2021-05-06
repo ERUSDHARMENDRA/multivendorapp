@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:shapeyou/Screen/top_picke_storer.dart';
-import 'package:shapeyou/provider/auth_provider.dart';
 import 'package:shapeyou/widgets/image_slider.dart';
 import 'package:shapeyou/widgets/my_appbar.dart';
+import 'package:shapeyou/widgets/near_by_store.dart';
 
 class HomeScreen extends StatefulWidget {
   static const String id = 'home-screen';
@@ -15,18 +14,20 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
-    final auth = Provider.of<AuthProvider>(context);
-
     return Scaffold(
+      backgroundColor: Colors.grey[280],
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(112),
         child: MyAppBar(),
       ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      body: ListView(
         children: [
           ImageSlider(),
-          Container(height: 200, child: TopPickStore()),
+          Container(color: Colors.white, height: 200, child: TopPickStore()),
+          Padding(
+            padding: const EdgeInsets.only(top: 4.0),
+            child: NearbyStores(),
+          ),
         ],
       ),
     );

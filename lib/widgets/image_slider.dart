@@ -31,56 +31,60 @@ class _ImageSliderState extends State<ImageSlider> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        FutureBuilder(
-            future: getSliderImageFromDb(),
-            builder: (_, snapShot) {
-              return snapShot.data == null
-                  ? Center(
-                      child: CircularProgressIndicator(),
-                    )
-                  : Padding(
-                      padding: const EdgeInsets.only(
-                        top: 8.0,
-                      ),
-                      child: CarouselSlider.builder(
-                        itemCount: snapShot.data.length,
-                        itemBuilder: (context, int index) {
-                          DocumentSnapshot sliderImage = snapShot.data[index];
-                          Map getImage = sliderImage.data();
-                          return SizedBox(
-                              width: MediaQuery.of(context).size.width,
-                              child: Image.network(
-                                getImage['image'],
-                                fit: BoxFit.fill,
-                              ));
-                        },
-                        options: CarouselOptions(
-                            viewportFraction: 1,
-                            initialPage: 0,
-                            autoPlay: true,
-                            height: 150,
-                            onPageChanged: (int i, carouselPageChangedReason) {
-                              setState(() {
-                                _index = i;
-                              });
-                            }),
-                      ),
-                    );
-            }),
-        DotsIndicator(
-          dotsCount: _dataLength,
-          position: _index.toDouble(),
-          decorator: DotsDecorator(
-            size: const Size.square(5.0),
-            activeSize: const Size(18.0, 5.0),
-            activeShape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(5.0)),
-            activeColor: Theme.of(context).primaryColor,
+    return Container(
+      color: Colors.white,
+      child: Column(
+        children: [
+          FutureBuilder(
+              future: getSliderImageFromDb(),
+              builder: (_, snapShot) {
+                return snapShot.data == null
+                    ? Center(
+                        child: CircularProgressIndicator(),
+                      )
+                    : Padding(
+                        padding: const EdgeInsets.only(
+                          top: 8.0,
+                        ),
+                        child: CarouselSlider.builder(
+                          itemCount: snapShot.data.length,
+                          itemBuilder: (context, int index) {
+                            DocumentSnapshot sliderImage = snapShot.data[index];
+                            Map getImage = sliderImage.data();
+                            return SizedBox(
+                                width: MediaQuery.of(context).size.width,
+                                child: Image.network(
+                                  getImage['image'],
+                                  fit: BoxFit.fill,
+                                ));
+                          },
+                          options: CarouselOptions(
+                              viewportFraction: 1,
+                              initialPage: 0,
+                              autoPlay: true,
+                              height: 150,
+                              onPageChanged:
+                                  (int i, carouselPageChangedReason) {
+                                setState(() {
+                                  _index = i;
+                                });
+                              }),
+                        ),
+                      );
+              }),
+          DotsIndicator(
+            dotsCount: _dataLength,
+            position: _index.toDouble(),
+            decorator: DotsDecorator(
+              size: const Size.square(5.0),
+              activeSize: const Size(18.0, 5.0),
+              activeShape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(5.0)),
+              activeColor: Theme.of(context).primaryColor,
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
