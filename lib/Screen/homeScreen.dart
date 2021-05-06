@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shapeyou/Screen/main_screen.dart';
 import 'package:shapeyou/Screen/top_picke_storer.dart';
 import 'package:shapeyou/widgets/image_slider.dart';
 import 'package:shapeyou/widgets/my_appbar.dart';
@@ -15,20 +16,24 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[280],
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(112),
-        child: MyAppBar(),
-      ),
-      body: ListView(
-        children: [
-          ImageSlider(),
-          Container(color: Colors.white, height: 200, child: TopPickStore()),
-          Padding(
-            padding: const EdgeInsets.only(top: 4.0),
-            child: NearbyStores(),
-          ),
-        ],
+      backgroundColor: Colors.grey[200],
+      body: NestedScrollView(
+        headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+          return [
+            MyAppBar(),
+          ];
+        },
+        body: ListView(
+          padding: EdgeInsets.only(top: 0.0),
+          children: [
+            ImageSlider(),
+            Container(color: Colors.white, height: 200, child: TopPickStore()),
+            Padding(
+              padding: const EdgeInsets.only(top: 6),
+              child: NearbyStores(),
+            ),
+          ],
+        ),
       ),
     );
   }

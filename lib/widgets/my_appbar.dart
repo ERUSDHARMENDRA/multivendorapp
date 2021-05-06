@@ -1,8 +1,6 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shapeyou/Screen/map_screen.dart';
-import 'package:shapeyou/Screen/welcome_screen.dart';
 import 'package:shapeyou/provider/location_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -36,7 +34,9 @@ class _MyAppBarState extends State<MyAppBar> {
   Widget build(BuildContext context) {
     final locationData = Provider.of<LocationProvider>(context);
 
-    return AppBar(
+    return SliverAppBar(
+      //now the app bar is scrollable. U can play with this silver app bar
+      expandedHeight: 200,
       automaticallyImplyLeading: false,
       elevation: 0.0,
       leading: Container(),
@@ -85,21 +85,6 @@ class _MyAppBarState extends State<MyAppBar> {
           ],
         ),
       ),
-      actions: [
-        IconButton(
-          icon: Icon(Icons.power_settings_new),
-          color: Colors.white,
-          onPressed: () {
-            FirebaseAuth.instance.signOut();
-            Navigator.pushReplacementNamed(context, WelcomeScreen.id);
-          },
-        ),
-        IconButton(
-          icon: Icon(Icons.account_circle_outlined),
-          color: Colors.white,
-          onPressed: () {},
-        ),
-      ],
       bottom: PreferredSize(
         preferredSize: Size.fromHeight(56),
         child: Padding(

@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shapeyou/Screen/landing_screen.dart';
+import 'package:shapeyou/Screen/main_screen.dart';
 import 'package:shapeyou/Screen/welcome_screen.dart';
 import 'package:shapeyou/services/user_services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -56,7 +57,7 @@ class _SplashScreenState extends State<SplashScreen> {
     prefs.setString('address', result['address']);
     prefs.setString('location', result['location']);
     //after updating prefs , navigate to homepage
-    Navigator.pushReplacementNamed(context, HomeScreen.id);
+    Navigator.pushReplacementNamed(context, MainScreen.id);
   }
 
   @override

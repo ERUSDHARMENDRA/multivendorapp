@@ -44,7 +44,7 @@ class _ImageSliderState extends State<ImageSlider> {
                       )
                     : Padding(
                         padding: const EdgeInsets.only(
-                          top: 8.0,
+                          top: 4.0,
                         ),
                         child: CarouselSlider.builder(
                           itemCount: snapShot.data.length,
