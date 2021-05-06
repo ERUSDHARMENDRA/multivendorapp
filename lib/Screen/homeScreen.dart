@@ -26,7 +26,7 @@ class _HomeScreenState extends State<HomeScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           ImageSlider(),
-          Container(height: 180, child: TopPickStore()),
+          Container(height: 200, child: TopPickStore()),
         ],
       ),
     );

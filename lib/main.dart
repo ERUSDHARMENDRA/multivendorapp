@@ -8,6 +8,7 @@ import 'package:shapeyou/Screen/welcome_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:shapeyou/provider/auth_provider.dart';
 import 'package:shapeyou/provider/location_provider.dart';
+import 'package:shapeyou/provider/store_provider.dart';
 
 import 'Screen/splash_screen.dart';
 
@@ -23,6 +24,9 @@ void main() async {
         ),
         ChangeNotifierProvider(
           create: (_) => LocationProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => StoreProvider(),
         ),
       ],
       child: MyApp(),

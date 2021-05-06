@@ -92,6 +92,7 @@ class AuthProvider with ChangeNotifier {
               ),
             ),
             actions: [
+              // ignore: deprecated_member_use
               FlatButton(
                 onPressed: () async {
                   try {
