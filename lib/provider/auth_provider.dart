@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shapeyou/Screen/homeScreen.dart';
 import 'package:shapeyou/Screen/landing_screen.dart';
+import 'package:shapeyou/Screen/main_screen.dart';
 import 'package:shapeyou/provider/location_provider.dart';
 import 'package:shapeyou/services/user_services.dart';
 
@@ -114,7 +115,7 @@ class AuthProvider with ChangeNotifier {
                             //if exists, no new data, so no need to update
                             if (snapShot.data()['address'] != null) {
                               Navigator.pushReplacementNamed(
-                                  context, HomeScreen.id);
+                                  context, MainScreen.id);
                             }
                             Navigator.pushReplacementNamed(
                                 context, LandingScreen.id);
@@ -122,7 +123,7 @@ class AuthProvider with ChangeNotifier {
                             //need to update new selected address
                             updateUser(id: user.uid, number: user.phoneNumber);
                             Navigator.pushReplacementNamed(
-                                context, HomeScreen.id);
+                                context, MainScreen.id);
                           }
                         } else {
                           //user doesn't exists

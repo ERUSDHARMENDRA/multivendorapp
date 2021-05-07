@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:provider/provider.dart';
 import 'package:shapeyou/Screen/map_screen.dart';
 import 'package:shapeyou/provider/location_provider.dart';
@@ -44,7 +45,13 @@ class _MyAppBarState extends State<MyAppBar> {
         onPressed: () {
           locationData.getCurrentPosition();
           if (locationData.permissionAllowed == true) {
-            Navigator.pushNamed(context, MapScreen.id);
+            pushNewScreenWithRouteSettings(
+              context,
+              screen: MapScreen(),
+              settings: RouteSettings(name: MapScreen.id),
+              withNavBar: false,
+              pageTransitionAnimation: PageTransitionAnimation.cupertino,
+            );
           } else {
             print('Permission not Allowed');
           }

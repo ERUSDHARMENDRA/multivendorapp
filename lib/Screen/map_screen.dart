@@ -5,6 +5,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:shapeyou/Screen/homeScreen.dart';
+import 'package:shapeyou/Screen/main_screen.dart';
 import 'package:shapeyou/provider/auth_provider.dart';
 import 'package:shapeyou/provider/location_provider.dart';
 
@@ -186,7 +187,7 @@ class _MapScreenState extends State<MapScreen> {
                                       id: user.uid,
                                       number: user.phoneNumber,
                                     );
-                                    Navigator.pushNamed(context, HomeScreen.id);
+                                    Navigator.pushNamed(context, MainScreen.id);
                                   },
                                   color: _locating
                                       ? Colors.grey
