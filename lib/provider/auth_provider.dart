@@ -1,11 +1,12 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:shapeyou/Screen/homeScreen.dart';
 import 'package:shapeyou/Screen/landing_screen.dart';
 import 'package:shapeyou/Screen/main_screen.dart';
-import 'package:shapeyou/provider/location_provider.dart';
 import 'package:shapeyou/services/user_services.dart';
+
+import 'location_provider.dart';
 
 class AuthProvider with ChangeNotifier {
   FirebaseAuth _auth = FirebaseAuth.instance;
@@ -20,6 +21,7 @@ class AuthProvider with ChangeNotifier {
   double longitude;
   String address;
   String location;
+  DocumentSnapshot snapshot;
 
   Future<void> verifyPhone({BuildContext context, String number}) async {
     this.loading = true;
@@ -42,20 +44,20 @@ class AuthProvider with ChangeNotifier {
 
     final PhoneCodeSent smsOtpSend = (String verId, int resendToken) async {
       this.verificationId = verId;
-
-      // dialog to enter otp
+      //open dialog to enter received OTP SMS
       smsOtpDialog(context, number);
     };
 
     try {
       _auth.verifyPhoneNumber(
-          phoneNumber: number,
-          verificationCompleted: verificationCompleted,
-          verificationFailed: verificationFailed,
-          codeSent: smsOtpSend,
-          codeAutoRetrievalTimeout: (String verId) {
-            this.verificationId = verId;
-          });
+        phoneNumber: number,
+        verificationCompleted: verificationCompleted,
+        verificationFailed: verificationFailed,
+        codeSent: smsOtpSend,
+        codeAutoRetrievalTimeout: (String verId) {
+          this.verificationId = verId;
+        },
+      );
     } catch (e) {
       this.error = e.toString();
       this.loading = false;
@@ -93,7 +95,6 @@ class AuthProvider with ChangeNotifier {
               ),
             ),
             actions: [
-              // ignore: deprecated_member_use
               FlatButton(
                 onPressed: () async {
                   try {
@@ -104,15 +105,17 @@ class AuthProvider with ChangeNotifier {
                     final User user =
                         (await _auth.signInWithCredential(phoneAuthCredential))
                             .user;
+
                     if (user != null) {
                       this.loading = false;
                       notifyListeners();
+
                       _userServices.getUserById(user.uid).then((snapShot) {
                         if (snapShot.exists) {
                           //user data already exists
                           if (this.screen == 'Login') {
-                            //need to check user data already exists in db or not
-                            //if exists, no new data, so no need to update
+                            //need to check user data already exists in db or not.
+                            //if its 'login'. no new data, so no need to update
                             if (snapShot.data()['address'] != null) {
                               Navigator.pushReplacementNamed(
                                   context, MainScreen.id);
@@ -126,20 +129,19 @@ class AuthProvider with ChangeNotifier {
                                 context, MainScreen.id);
                           }
                         } else {
-                          //user doesn't exists
+                          //user data does not exists
                           //will create new data in db
-                          print(
-                              '${locationData.latitude}:${locationData.longitude}');
+
                           _createUser(id: user.uid, number: user.phoneNumber);
                           Navigator.pushReplacementNamed(
                               context, LandingScreen.id);
                         }
                       });
                     } else {
-                      print('Login Failed');
+                      print('Login failed');
                     }
                   } catch (e) {
-                    this.error = 'Invalid OTP ';
+                    this.error = 'Invalid OTP';
                     notifyListeners();
                     print(e.toString());
                     Navigator.of(context).pop();
@@ -165,26 +167,41 @@ class AuthProvider with ChangeNotifier {
       'latitude': this.latitude,
       'longitude': this.longitude,
       'address': this.address,
-      'location': this.location,
+      'location': this.location
     });
     this.loading = false;
     notifyListeners();
   }
 
-  void updateUser({String id, String number}) async {
-    try {
-      _userServices.updateUserData({
-        'id': id,
-        'number': number,
-        'latitude': this.latitude,
-        'longitude': this.longitude,
-        'address': this.address,
-        'location': this.location,
-      });
-      this.loading = false;
+  void updateUser({
+    String id,
+    String number,
+  }) {
+    _userServices.updateUserData({
+      'id': id,
+      'number': number,
+      'latitude': this.latitude,
+      'longitude': this.longitude,
+      'address': this.address,
+      'location': this.location
+    });
+    this.loading = false;
+    notifyListeners();
+  }
+
+  getUserDetails() async {
+    DocumentSnapshot result = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(_auth.currentUser.uid)
+        .get();
+    if (result != null) {
+      this.snapshot = result;
       notifyListeners();
-    } catch (e) {
-      print('Error $e');
+    } else {
+      this.snapshot = null;
+      notifyListeners();
     }
+
+    return result;
   }
 }

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:shapeyou/Screen/main_screen.dart';
 import 'package:shapeyou/Screen/top_picke_storer.dart';
 import 'package:shapeyou/widgets/image_slider.dart';
 import 'package:shapeyou/widgets/my_appbar.dart';
@@ -19,18 +18,19 @@ class _HomeScreenState extends State<HomeScreen> {
       backgroundColor: Colors.grey[200],
       body: NestedScrollView(
         headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-          return [
-            MyAppBar(),
-          ];
+          return [MyAppBar()];
         },
         body: ListView(
           padding: EdgeInsets.only(top: 0.0),
           children: [
             ImageSlider(),
-            Container(color: Colors.white, height: 200, child: TopPickStore()),
+            Container(
+              color: Colors.white,
+              child: TopPickStore(),
+            ),
             Padding(
               padding: const EdgeInsets.only(top: 6),
-              child: NearbyStores(),
+              child: NearByStores(),
             ),
           ],
         ),

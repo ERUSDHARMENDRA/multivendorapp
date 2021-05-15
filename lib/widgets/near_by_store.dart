@@ -1,22 +1,22 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:paginate_firestore/bloc/pagination_listeners.dart';
 import 'package:paginate_firestore/paginate_firestore.dart';
 import 'package:provider/provider.dart';
+import 'package:shapeyou/provider/cart_provider.dart';
 import 'package:shapeyou/provider/store_provider.dart';
 import 'package:shapeyou/services/store_services.dart';
 import 'package:shapeyou/widgets/constants.dart';
 
-class NearbyStores extends StatefulWidget {
-  static const String id = 'near-by-store';
-
+class NearByStores extends StatefulWidget {
   @override
-  _NearbyStoresState createState() => _NearbyStoresState();
+  _NearByStoresState createState() => _NearByStoresState();
 }
 
-class _NearbyStoresState extends State<NearbyStores> {
+class _NearByStoresState extends State<NearByStores> {
   StoreServices _storeServices = StoreServices();
   PaginateRefreshedChangeListener refreshedChangeListener =
       PaginateRefreshedChangeListener();
@@ -24,21 +24,23 @@ class _NearbyStoresState extends State<NearbyStores> {
   @override
   Widget build(BuildContext context) {
     final _storeData = Provider.of<StoreProvider>(context);
+    final _cart = Provider.of<CartProvider>(context);
     _storeData.getUserLocationData(context);
 
     String getDistance(location) {
       var distance = Geolocator.distanceBetween(_storeData.userLatitude,
           _storeData.userLongitude, location.latitude, location.longitude);
-      var distanceInKm = distance / 1000;
+      var distanceInKm = distance / 1000; //this is will show in kilometer
       return distanceInKm.toStringAsFixed(2);
     }
 
     return Container(
       color: Colors.white,
       child: StreamBuilder<QuerySnapshot>(
-        stream: _storeServices.getNearbyStore(), //will change it soon
+        stream: _storeServices.getNearByStore(), //will change it soon
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapShot) {
-          if (!snapShot.hasData) return CircularProgressIndicator();
+          if (!snapShot.hasData)
+            return Center(child: CircularProgressIndicator());
           List shopDistance = [];
           for (int i = 0; i <= snapShot.data.docs.length - 1; i++) {
             var distance = Geolocator.distanceBetween(
@@ -49,25 +51,25 @@ class _NearbyStoresState extends State<NearbyStores> {
             var distanceInKm = distance / 1000;
             shopDistance.add(distanceInKm);
           }
-          shopDistance.sort(); // this will sort with nearby location
+          shopDistance
+              .sort(); // this will sort with nearest distance. if nearest distance is more than 10, that means no shop near by;
+
+          SchedulerBinding.instance.addPostFrameCallback((_) => setState(() {
+                _cart.getDistance(shopDistance[0]);
+              }));
           if (shopDistance[0] > 10) {
             return Container(
-              color: Colors.red,
               child: Stack(
                 children: [
                   Padding(
                     padding: const EdgeInsets.only(
-                        top: 30, bottom: 30, right: 20, left: 20),
+                        bottom: 30, top: 30, left: 20, right: 20),
                     child: Container(
-                      width: MediaQuery.of(context).size.width,
                       child: Center(
                         child: Text(
-                          'Currently we are not servicing in your area.\nPlease try later or try another location',
+                          'Currently we are not servicing in your area, Please try again later or try another location',
                           textAlign: TextAlign.left,
-                          style: TextStyle(
-                            color: Colors.black54,
-                            fontSize: 20,
-                          ),
+                          style: TextStyle(color: Colors.black54, fontSize: 20),
                         ),
                       ),
                     ),
@@ -83,34 +85,32 @@ class _NearbyStoresState extends State<NearbyStores> {
                     right: 10.0,
                     top: 80,
                     child: Container(
-                        width: 100,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Made by: ',
-                              style: TextStyle(
-                                color: Colors.black54,
-                              ),
-                            ),
-                            Text(
-                              'KODEMAFIA',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: 'Anton',
-                                  letterSpacing: 2,
-                                  color: Colors.grey),
-                            )
-                          ],
-                        )),
-                  ),
+                      width: 100,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Made by : ',
+                            style: TextStyle(color: Colors.black54),
+                          ),
+                          Text(
+                            'JAMDEV',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontFamily: 'Anton',
+                                letterSpacing: 2,
+                                color: Colors.grey),
+                          )
+                        ],
+                      ),
+                    ),
+                  )
                 ],
               ),
             );
           }
-
           return Padding(
-            padding: EdgeInsets.all(8.0),
+            padding: EdgeInsets.all(8),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -140,7 +140,7 @@ class _NearbyStoresState extends State<NearbyStores> {
                           padding: const EdgeInsets.only(
                               left: 8, right: 8, bottom: 10),
                           child: Text(
-                            'Find Out quality products near you',
+                            'Findout quality products near you',
                             style: TextStyle(fontSize: 12, color: Colors.grey),
                           ),
                         ),
@@ -192,7 +192,7 @@ class _NearbyStoresState extends State<NearbyStores> {
                                 ),
                                 Text(
                                   document.data()['dialog'],
-                                  style: kstoreCartStyle,
+                                  style: kStoreCardStyle,
                                 ),
                                 SizedBox(
                                   height: 3,
@@ -203,7 +203,7 @@ class _NearbyStoresState extends State<NearbyStores> {
                                   child: Text(
                                     document.data()['address'],
                                     overflow: TextOverflow.ellipsis,
-                                    style: kstoreCartStyle,
+                                    style: kStoreCardStyle,
                                   ),
                                 ),
                                 SizedBox(
@@ -212,13 +212,13 @@ class _NearbyStoresState extends State<NearbyStores> {
                                 Text(
                                   '${getDistance(document['location'])}Km',
                                   overflow: TextOverflow.ellipsis,
-                                  style: kstoreCartStyle,
+                                  style: kStoreCardStyle,
                                 ),
                                 SizedBox(
                                   height: 3,
                                 ),
                                 Row(
-                                  //this is to rating ...will work later on
+                                  //this is to show Rating .. will work on rating later
                                   children: [
                                     Icon(
                                       Icons.star,
@@ -230,17 +230,17 @@ class _NearbyStoresState extends State<NearbyStores> {
                                     ),
                                     Text(
                                       '3.2',
-                                      style: kstoreCartStyle,
+                                      style: kStoreCardStyle,
                                     )
                                   ],
-                                )
+                                ),
                               ],
-                            ),
+                            )
                           ],
                         ),
                       ),
                     ),
-                    query: _storeServices.getNearbyStorePagination(),
+                    query: _storeServices.getNearByStorePagination(),
                     listeners: [
                       refreshedChangeListener,
                     ],
@@ -252,9 +252,7 @@ class _NearbyStoresState extends State<NearbyStores> {
                             Center(
                               child: Text(
                                 '**That\s all folks**',
-                                style: TextStyle(
-                                  color: Colors.grey,
-                                ),
+                                style: TextStyle(color: Colors.grey),
                               ),
                             ),
                             Image.asset(
@@ -265,28 +263,26 @@ class _NearbyStoresState extends State<NearbyStores> {
                               right: 10.0,
                               top: 80,
                               child: Container(
-                                  width: 100,
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        'Made by: ',
-                                        style: TextStyle(
-                                          color: Colors.black54,
-                                        ),
-                                      ),
-                                      Text(
-                                        'KODEMAFIA',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontFamily: 'Anton',
-                                            letterSpacing: 2,
-                                            color: Colors.grey),
-                                      )
-                                    ],
-                                  )),
-                            ),
+                                width: 100,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'Made by : ',
+                                      style: TextStyle(color: Colors.black54),
+                                    ),
+                                    Text(
+                                      'JAMDEV',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontFamily: 'Anton',
+                                          letterSpacing: 2,
+                                          color: Colors.grey),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            )
                           ],
                         ),
                       ),
@@ -295,7 +291,7 @@ class _NearbyStoresState extends State<NearbyStores> {
                   onRefresh: () async {
                     refreshedChangeListener.refreshed = true;
                   },
-                ),
+                )
               ],
             ),
           );
@@ -304,3 +300,5 @@ class _NearbyStoresState extends State<NearbyStores> {
     );
   }
 }
+
+//thanks

@@ -1,5 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:shapeyou/Screen/welcome_screen.dart';
 import 'package:shapeyou/services/store_services.dart';
 import 'package:shapeyou/services/user_services.dart';
@@ -10,6 +12,28 @@ class StoreProvider with ChangeNotifier {
   User user = FirebaseAuth.instance.currentUser;
   var userLatitude = 0.0;
   var userLongitude = 0.0;
+  String selectedStore;
+  String selectedStoreId;
+  DocumentSnapshot storedetails;
+  String distance;
+  String selectedProductCategory;
+  String selectedSubCategory;
+
+  getSelectedStore(storeDetails, distance) {
+    this.storedetails = storeDetails;
+    this.distance = distance;
+    notifyListeners();
+  }
+
+  selectedCategory(category) {
+    this.selectedProductCategory = category;
+    notifyListeners();
+  }
+
+  selectedCategorySub(subCategory) {
+    this.selectedSubCategory = subCategory;
+    notifyListeners();
+  }
 
   Future<void> getUserLocationData(context) async {
     _userServices.getUserById(user.uid).then((result) {
@@ -21,5 +45,32 @@ class StoreProvider with ChangeNotifier {
         Navigator.pushReplacementNamed(context, WelcomeScreen.id);
       }
     });
+  }
+
+  Future<Position> determinePosition() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      return Future.error('Location services are disabled.');
+    }
+
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.deniedForever) {
+      return Future.error(
+          'Location permissions are permantly denied, we cannot request permissions.');
+    }
+
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission != LocationPermission.whileInUse &&
+          permission != LocationPermission.always) {
+        return Future.error(
+            'Location permissions are denied (actual value: $permission).');
+      }
+    }
+
+    return await Geolocator.getCurrentPosition();
   }
 }

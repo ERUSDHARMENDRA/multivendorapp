@@ -1,10 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
-import 'package:shapeyou/Screen/favourite_screen.dart';
-import 'package:shapeyou/Screen/homeScreen.dart';
-import 'package:shapeyou/Screen/my_orders_screen.dart';
 import 'package:shapeyou/Screen/profile_screen.dart';
+import 'package:shapeyou/widgets/cart/cart_notification.dart';
+
+import 'favourite_screen.dart';
+import 'homeScreen.dart';
+import 'my_orders_screen.dart';
 
 class MainScreen extends StatelessWidget {
   static const String id = 'main-screen';
@@ -27,14 +29,14 @@ class MainScreen extends StatelessWidget {
     List<PersistentBottomNavBarItem> _navBarsItems() {
       return [
         PersistentBottomNavBarItem(
-          icon: Image.asset('images/shapeyou_logo.png'),
+          icon: Image.asset('images/logo.png'),
           title: ("Home"),
           activeColorPrimary: Theme.of(context).primaryColor,
           inactiveColorPrimary: CupertinoColors.systemGrey,
         ),
         PersistentBottomNavBarItem(
           icon: Icon(CupertinoIcons.square_favorites_alt),
-          title: ("My Favourite"),
+          title: ("My Favourites"),
           activeColorPrimary: Theme.of(context).primaryColor,
           inactiveColorPrimary: CupertinoColors.systemGrey,
         ),
@@ -54,6 +56,11 @@ class MainScreen extends StatelessWidget {
     }
 
     return Scaffold(
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.only(bottom: 56),
+        child: CartNotification(),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       body: PersistentTabView(
         context,
         navBarHeight: 56,
@@ -62,20 +69,16 @@ class MainScreen extends StatelessWidget {
         items: _navBarsItems(),
         confineInSafeArea: true,
         backgroundColor: Colors.white,
-        // Default is Colors.white.
         handleAndroidBackButtonPress: true,
-        // Default is true.
         resizeToAvoidBottomInset: true,
-        // This needs to be true if you want to move up the screen when keyboard appears. Default is true.
+        // This needs to be true if you want to move up the screen when keyboard appears.
         stateManagement: true,
-        // Default is true.
         hideNavigationBarWhenKeyboardShows: true,
-        // Recommended to set 'resizeToAvoidBottomInset' as true while using this argument. Default is true.
+        // Recommended to set 'resizeToAvoidBottomInset' as true while using this argument.
         decoration: NavBarDecoration(
-          borderRadius: BorderRadius.circular(0.0),
-          colorBehindNavBar: Colors.white,
-          border: Border.all(color: Colors.black45),
-        ),
+            borderRadius: BorderRadius.circular(0.0),
+            colorBehindNavBar: Colors.white,
+            border: Border.all(color: Colors.black45)),
         popAllScreensOnTapOfSelectedTab: true,
         popActionScreens: PopActionScreensType.all,
         itemAnimationProperties: ItemAnimationProperties(
@@ -89,9 +92,9 @@ class MainScreen extends StatelessWidget {
           curve: Curves.ease,
           duration: Duration(milliseconds: 200),
         ),
-        navBarStyle:
-            NavBarStyle.style9, // Choose the nav bar style with this property.
+        navBarStyle: NavBarStyle.style9, // Cyou can play with the style u want
       ),
     );
   }
 }
+

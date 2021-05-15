@@ -9,10 +9,11 @@ class RegisterScreen extends StatelessWidget {
           padding: const EdgeInsets.all(20.0),
           child: Column(
             children: [
-              Divider(),
-              Hero(
-                  tag: 'Logo',
-                  child: Image.asset('images/shapeyou_logo.png', height: 100.0, width: 100.0,)),
+              Hero(tag: 'logo', child: Image.asset('images/logo.png')),
+              TextField(),
+              TextField(),
+              TextField(),
+              TextField(),
             ],
           ),
         ),

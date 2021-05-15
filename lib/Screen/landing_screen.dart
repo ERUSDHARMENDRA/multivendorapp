@@ -1,13 +1,13 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:shapeyou/Screen/homeScreen.dart';
-import 'package:shapeyou/Screen/map_screen.dart';
 import 'package:shapeyou/provider/location_provider.dart';
+import 'package:shapeyou/services/user_services.dart';
+import 'main_screen.dart';
+import 'map_screen.dart';
 
 class LandingScreen extends StatefulWidget {
   static const String id = 'landing-screen';
-
-  const LandingScreen({Key key}) : super(key: key);
 
   @override
   _LandingScreenState createState() => _LandingScreenState();
@@ -16,11 +16,23 @@ class LandingScreen extends StatefulWidget {
 class _LandingScreenState extends State<LandingScreen> {
   LocationProvider _locationProvider = LocationProvider();
   bool _loading = false;
+  DocumentSnapshot _authResult;
+  UserServices _userServices = UserServices();
+  User user = FirebaseAuth.instance.currentUser;
+
+  @override
+  void initState() {
+    _userServices.getUserById(user.uid).then((result) {
+      if (result.data()['latitude'] != null) {
+        Navigator.pushReplacementNamed(context, MainScreen.id);
+      }
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
       body: Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -28,7 +40,7 @@ class _LandingScreenState extends State<LandingScreen> {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Text(
-                'Delivery Address not Set',
+                'Delivery Address not set',
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                 ),
@@ -37,13 +49,13 @@ class _LandingScreenState extends State<LandingScreen> {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Text(
-                'Please update your Delivery Location to find nearest Store for you',
+                'Please update your Delivery Location to find nearest Stores for you',
                 textAlign: TextAlign.center,
                 style: TextStyle(color: Colors.grey),
               ),
             ),
             Container(
-              width: 400,
+              width: 600,
               child: Image.asset(
                 'images/city.png',
                 fit: BoxFit.fill,
@@ -51,22 +63,21 @@ class _LandingScreenState extends State<LandingScreen> {
               ),
             ),
             _loading
-                ? CircularProgressIndicator(
-                    valueColor: AlwaysStoppedAnimation(Colors.white),
-                  )
+                ? CircularProgressIndicator()
                 : FlatButton(
-                    child: Text(
-                      'Set Your Location',
-                      style: TextStyle(color: Colors.white),
-                    ),
                     color: Theme.of(context).primaryColor,
                     onPressed: () async {
                       setState(() {
                         _loading = true;
                       });
+
                       await _locationProvider.getCurrentPosition();
                       if (_locationProvider.permissionAllowed == true) {
-                        Navigator.pushReplacementNamed(context, MapScreen.id);
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (BuildContext context) =>
+                                    MapScreen()));
                       } else {
                         Future.delayed(Duration(seconds: 4), () {
                           if (_locationProvider.permissionAllowed == false) {
@@ -76,16 +87,22 @@ class _LandingScreenState extends State<LandingScreen> {
                             });
                             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                               content: Text(
-                                  'Please allow Permission to find nearest stores for you'),
+                                  'Please allow permission to find nearest stores for you'),
                             ));
                           }
                         });
-                        Navigator.pushReplacementNamed(context, HomeScreen.id);
                       }
-                    }),
+                    },
+                    child: Text(
+                      'Set Your Location',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
           ],
         ),
       ),
     );
   }
 }
+
+//restart app

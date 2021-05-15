@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:shapeyou/widgets/constants.dart';
 
-class OnBoardScreen extends StatefulWidget {
+class OnBaordScreen extends StatefulWidget {
   @override
-  _OnBoardScreenState createState() => _OnBoardScreenState();
+  _OnBaordScreenState createState() => _OnBaordScreenState();
 }
 
 final _controller = PageController(
@@ -16,36 +16,31 @@ int _currentPage = 0;
 List<Widget> _pages = [
   Column(
     children: [
-      Expanded(child: Image.asset('images/shapeyou_logo.png')),
+      Expanded(child: Image.asset('images/enteraddress.png')),
       Text(
         'Set Your Delivery Location',
         style: kPageViewTextStyle,
+        textAlign: TextAlign.center,
       ),
     ],
   ),
   Column(
     children: [
-      Expanded(
-        child: Image.asset('images/shapeyou_logo.png'),
-      ),
-      Text(
-        'Order Online from your Favourite Store',
-        style: kPageViewTextStyle,
-      ),
+      Expanded(child: Image.asset('images/orderfood.png')),
+      Text('Order Online from Your Favourite Store',
+          style: kPageViewTextStyle, textAlign: TextAlign.center),
     ],
   ),
   Column(
     children: [
-      Expanded(child: Image.asset('images/shapeyou_logo.png')),
-      Text(
-        'Quick deliver to your doorstep',
-        style: kPageViewTextStyle,
-      ),
+      Expanded(child: Image.asset('images/deliverfood.png')),
+      Text('Quick Deliver to your Doorstep',
+          style: kPageViewTextStyle, textAlign: TextAlign.center),
     ],
   ),
 ];
 
-class _OnBoardScreenState extends State<OnBoardScreen> {
+class _OnBaordScreenState extends State<OnBaordScreen> {
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -61,24 +56,21 @@ class _OnBoardScreenState extends State<OnBoardScreen> {
             },
           ),
         ),
-
-        //dot indicator to the bottom of onboard screen
         SizedBox(
-          height: 20.0,
+          height: 10,
         ),
         DotsIndicator(
           dotsCount: _pages.length,
           position: _currentPage.toDouble(),
           decorator: DotsDecorator(
-            size: const Size.square(9.0),
-            activeSize: const Size(18.0, 9.0),
-            activeShape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(5.0)),
-            activeColor: Theme.of(context).primaryColor,
-          ),
+              size: const Size.square(9.0),
+              activeSize: const Size(18.0, 9.0),
+              activeShape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(5.0)),
+              activeColor: Theme.of(context).primaryColor),
         ),
         SizedBox(
-          height: 20.0,
+          height: 20,
         ),
       ],
     );

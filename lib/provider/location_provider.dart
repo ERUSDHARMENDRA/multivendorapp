@@ -11,7 +11,7 @@ class LocationProvider with ChangeNotifier {
   var selectedAddress;
   bool loading = false;
 
-  Future<void> getCurrentPosition() async {
+  Future<Position> getCurrentPosition() async {
     Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
     if (position != null) {
@@ -21,13 +21,13 @@ class LocationProvider with ChangeNotifier {
       final coordinates = new Coordinates(this.latitude, this.longitude);
       final addresses =
           await Geocoder.local.findAddressesFromCoordinates(coordinates);
-
       this.selectedAddress = addresses.first;
       this.permissionAllowed = true;
       notifyListeners();
     } else {
       print('Permission not allowed');
     }
+    return position;
   }
 
   void onCameraMove(CameraPosition cameraPosition) async {
@@ -42,7 +42,7 @@ class LocationProvider with ChangeNotifier {
         await Geocoder.local.findAddressesFromCoordinates(coordinates);
     this.selectedAddress = addresses.first;
     notifyListeners();
-    print("${selectedAddress.featureName} : ${selectedAddress.addresssLine}");
+    print("${selectedAddress.featureName} : ${selectedAddress.addressLine}");
   }
 
   Future<void> savePrefs() async {
@@ -53,3 +53,4 @@ class LocationProvider with ChangeNotifier {
     prefs.setString('location', this.selectedAddress.featureName);
   }
 }
+
