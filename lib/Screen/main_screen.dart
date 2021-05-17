@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:shapeyou/Screen/profile_screen.dart';
 import 'package:shapeyou/widgets/cart/cart_notification.dart';
-
 import 'favourite_screen.dart';
 import 'homeScreen.dart';
 import 'my_orders_screen.dart';

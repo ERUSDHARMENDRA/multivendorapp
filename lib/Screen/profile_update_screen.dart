@@ -156,6 +156,3 @@ class _UpdateProfileState extends State<UpdateProfile> {
     );
   }
 }
-
-//next video will do place Border
-//please support and share maximum

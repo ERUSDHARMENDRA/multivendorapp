@@ -2,7 +2,13 @@
 class Assets {
   Assets._();
 
+  static const String imagesBackground = 'images/background.JPG';
   static const String imagesCity = 'images/city.png';
+  static const String imagesDeliverfood = 'images/deliverfood.png';
+  static const String imagesEnteraddress = 'images/enteraddress.png';
   static const String imagesLike = 'images/like.gif';
+  static const String imagesLogo = 'images/logo.png';
+  static const String imagesMarker = 'images/marker.png';
+  static const String imagesOrderfood = 'images/orderfood.png';
   static const String imagesShapeyouLogo = 'images/shapeyou_logo.png';
 }

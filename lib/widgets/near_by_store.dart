@@ -140,7 +140,7 @@ class _NearByStoresState extends State<NearByStores> {
                           padding: const EdgeInsets.only(
                               left: 8, right: 8, bottom: 10),
                           child: Text(
-                            'Findout quality products near you',
+                            'Find Out quality products near you',
                             style: TextStyle(fontSize: 12, color: Colors.grey),
                           ),
                         ),
@@ -163,7 +163,7 @@ class _NearByStoresState extends State<NearByStores> {
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(4),
                                   child: Image.network(
-                                    document['imageUrl'],
+                                    document['ImageUrl'],
                                     fit: BoxFit.cover,
                                   ),
                                 ),

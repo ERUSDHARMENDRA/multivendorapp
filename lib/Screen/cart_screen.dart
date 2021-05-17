@@ -297,7 +297,7 @@ class _CartScreenState extends State<CartScreen> {
                                     child: ClipRRect(
                                         borderRadius: BorderRadius.circular(4),
                                         child: Image.network(
-                                          doc.data()['imageUrl'],
+                                          doc.data()['ImageUrl'],
                                           fit: BoxFit.cover,
                                         )),
                                   ),
@@ -490,5 +490,3 @@ class _CartScreenState extends State<CartScreen> {
     });
   }
 }
-
-//next Order Summary

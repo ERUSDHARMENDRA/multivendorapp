@@ -98,7 +98,7 @@ class _CartNotificationState extends State<CartNotification> {
                     ],
                   ),
                 ),
-              )
+              ),
             ],
           ),
         ),
@@ -106,5 +106,3 @@ class _CartNotificationState extends State<CartNotification> {
     );
   }
 }
-
-//one more error is there

@@ -15,6 +15,8 @@ import 'package:shapeyou/provider/store_provider.dart';
 import 'Screen/cart_screen.dart';
 import 'Screen/login_screen.dart';
 import 'Screen/main_screen.dart';
+import 'Screen/payment/existing_cards.dart';
+import 'Screen/payment/stripe_home.dart';
 import 'Screen/product_details_screen.dart';
 import 'Screen/product_list_screen.dart';
 import 'Screen/profile_screen.dart';
@@ -58,7 +60,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(primaryColor: Color(0xFF84c225), fontFamily: 'Lato'),
+      theme: ThemeData(primaryColor: Color(0xffd48a0b), fontFamily: 'Lato'),
       initialRoute: SplashScreen.id,
       routes: {
         SplashScreen.id: (context) => SplashScreen(),
@@ -73,8 +75,8 @@ class MyApp extends StatelessWidget {
         CartScreen.id: (context) => CartScreen(),
         ProfileScreen.id: (context) => ProfileScreen(),
         UpdateProfile.id: (context) => UpdateProfile(),
-        // ExistingCardsPage.id:(context)=>ExistingCardsPage(),
-        // StripeHome.id:(context)=>StripeHome(),
+        ExistingCardsPage.id: (context) => ExistingCardsPage(),
+        StripeHome.id: (context) => StripeHome(),
       },
       builder: EasyLoading.init(),
     );

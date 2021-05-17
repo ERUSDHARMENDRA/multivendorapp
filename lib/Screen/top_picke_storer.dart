@@ -94,7 +94,7 @@ class _TopPickStoreState extends State<TopPickStore> {
                                               borderRadius:
                                                   BorderRadius.circular(4),
                                               child: Image.network(
-                                                document['imageUrl'],
+                                                document['ImageUrl'],
                                                 fit: BoxFit.cover,
                                               ))),
                                     ),

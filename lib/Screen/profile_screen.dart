@@ -3,11 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:provider/provider.dart';
+import 'package:shapeyou/Screen/profile_update_screen.dart';
 import 'package:shapeyou/Screen/welcome_screen.dart';
 import 'package:shapeyou/provider/auth_provider.dart';
 import 'package:shapeyou/provider/location_provider.dart';
-
-import 'homeScreen.dart';
 import 'map_screen.dart';
 
 class ProfileScreen extends StatelessWidget {
@@ -19,13 +18,14 @@ class ProfileScreen extends StatelessWidget {
     var locationData = Provider.of<LocationProvider>(context);
     User user = FirebaseAuth.instance.currentUser;
     userDetails.getUserDetails();
+
     return Scaffold(
       appBar: AppBar(
         elevation: 0.0,
         centerTitle: true,
         iconTheme: IconThemeData(color: Colors.white),
         title: Text(
-          'Grocery Store',
+          'Multi-Vendor Store',
           style: TextStyle(color: Colors.white),
         ),
       ),
@@ -56,7 +56,7 @@ class ProfileScreen extends StatelessWidget {
                               radius: 40,
                               backgroundColor: Theme.of(context).primaryColor,
                               child: Text(
-                                'j',
+                                'M',
                                 style: TextStyle(
                                     fontSize: 50, color: Colors.white),
                               ),
@@ -161,8 +161,8 @@ class ProfileScreen extends StatelessWidget {
                     onPressed: () {
                       pushNewScreenWithRouteSettings(
                         context,
-                        settings: RouteSettings(name: null),
-                        screen: null,
+                        settings: RouteSettings(name: UpdateProfile.id),
+                        screen: UpdateProfile(),
                         withNavBar: false,
                         pageTransitionAnimation:
                             PageTransitionAnimation.cupertino,
@@ -173,18 +173,21 @@ class ProfileScreen extends StatelessWidget {
               ],
             ),
             ListTile(
+              onTap: () {},
               leading: Icon(Icons.history),
               title: Text('My Orders'),
               horizontalTitleGap: 2,
             ),
             Divider(),
             ListTile(
+              onTap: () {},
               leading: Icon(Icons.comment_outlined),
               title: Text('My Ratings & Reviews'),
               horizontalTitleGap: 2,
             ),
             Divider(),
             ListTile(
+              onTap: () {},
               leading: Icon(Icons.notifications_none),
               title: Text('Notifications'),
               horizontalTitleGap: 2,
@@ -201,7 +204,7 @@ class ProfileScreen extends StatelessWidget {
                   settings: RouteSettings(name: WelcomeScreen.id),
                   screen: WelcomeScreen(),
                   withNavBar: false,
-                  // make this false if u navigating to outside.
+                  // since navigating to outside made it false 'cause nothing to be accessed without login
                   pageTransitionAnimation: PageTransitionAnimation.cupertino,
                 );
               },
@@ -213,4 +216,4 @@ class ProfileScreen extends StatelessWidget {
   }
 }
 
-//if u use persistent_bottom_nav_bar 3.1.0 package. navigatin is differemt
+//navigation is different for persistent_nav_bar
