@@ -464,7 +464,7 @@ class _CartScreenState extends State<CartScreen> {
       'deliveryFee': deliveryFee,
       'total': payable,
       'discount': discount.toStringAsFixed(0),
-      'cod': cartProvider.cod, //cas on delivery or not,
+      'cod': cartProvider.cod, //cash on delivery or not,
       'discountCode':
           coupon.document == null ? null : coupon.document.data()['title'],
       'seller': {
@@ -479,12 +479,12 @@ class _CartScreenState extends State<CartScreen> {
         'location': '',
       },
     }).then((value) {
-      //after submitting order, need to clear cart list.
+      //clear the cart list after submitting the order
       orderProvider.success = false;
       _cartServices.deleteCart().then((value) {
         _cartServices.checkData().then((value) {
           EasyLoading.showSuccess('Your order is submitted');
-          Navigator.pop(context); //close cart screen
+          Navigator.pop(context); //close the current cart view
         });
       });
     });

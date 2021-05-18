@@ -146,6 +146,7 @@ class _MyOrdersState extends State<MyOrders> {
                                 ],
                               ),
                             ),
+
                             //TODO: Delivery boy contact, live location, and delivery boy name
                             if (document.data()['deliveryBoy']['name'].length >
                                 2)
@@ -175,6 +176,7 @@ class _MyOrdersState extends State<MyOrders> {
                                   ),
                                 ),
                               ),
+
                             ExpansionTile(
                               title: Text(
                                 'Order details',
@@ -243,7 +245,7 @@ class _MyOrdersState extends State<MyOrders> {
                                           ),
                                           if (int.parse(
                                                   document.data()['discount']) >
-                                              0) //only if disconut available will show
+                                              0) //show if discount is available
                                             Container(
                                               child: Column(
                                                 children: [
@@ -281,7 +283,7 @@ class _MyOrdersState extends State<MyOrders> {
                                                         style: TextStyle(
                                                             color: Colors.grey,
                                                             fontSize: 12),
-                                                      )
+                                                      ),
                                                     ],
                                                   ),
                                                 ],
@@ -313,6 +315,7 @@ class _MyOrdersState extends State<MyOrders> {
                                 )
                               ],
                             ),
+
                             Divider(
                               height: 3,
                               color: Colors.grey,

@@ -9,9 +9,11 @@ class CouponProvider with ChangeNotifier {
   getCouponDetails(title, sellerId) async {
     DocumentSnapshot document =
         await FirebaseFirestore.instance.collection('coupons').doc(title).get();
+
     if (document.exists) {
       this.document = document;
       notifyListeners();
+
       if (document.data()['sellerId'] == sellerId) {
         checkExpiry(document);
       }
@@ -25,7 +27,7 @@ class CouponProvider with ChangeNotifier {
     DateTime date = document.data()['Expiry'].toDate();
     var dateDiff = date.difference(DateTime.now()).inDays;
     if (dateDiff < 0) {
-      //coupon expired
+      //expired coupon
       this.expired = true;
       notifyListeners();
     } else {
