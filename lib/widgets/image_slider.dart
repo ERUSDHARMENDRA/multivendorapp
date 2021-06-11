@@ -1,7 +1,7 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dots_indicator/dots_indicator.dart';
-import 'package:flutter/material.dart';
-import 'package:carousel_slider/carousel_slider.dart';
+import 'package:flutter/materialder.dart';
 
 class ImageSlider extends StatefulWidget {
   @override
@@ -9,7 +9,6 @@ class ImageSlider extends StatefulWidget {
 }
 
 class _ImageSliderState extends State<ImageSlider> {
-
   int _index = 0;
   int _dataLength = 1;
 
@@ -18,7 +17,6 @@ class _ImageSliderState extends State<ImageSlider> {
     getSliderImageFromDb();
     super.initState();
   }
-
 
   Future getSliderImageFromDb() async {
     var _fireStore = FirebaseFirestore.instance;
@@ -30,7 +28,6 @@ class _ImageSliderState extends State<ImageSlider> {
     }
     return snapshot.docs;
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -44,35 +41,35 @@ class _ImageSliderState extends State<ImageSlider> {
               builder: (_, snapShot) {
                 return snapShot.data == null
                     ? Center(
-                        child: CircularProgressIndicator(),
-                      )
+                  child: CircularProgressIndicator(),
+                )
                     : Padding(
-                        padding: const EdgeInsets.only(top: 4),
-                        child: CarouselSlider.builder(
-                            itemCount: snapShot.data.length,
-                            itemBuilder: (context, int index) {
-                              DocumentSnapshot sliderImage =
-                                  snapShot.data[index];
-                              Map getImage = sliderImage.data();
-                              return SizedBox(
-                                  width: MediaQuery.of(context).size.width,
-                                  child: Image.network(
-                                    getImage['image'],
-                                    fit: BoxFit.fill,
-                                  ));
-                            },
-                            options: CarouselOptions(
-                                viewportFraction: 1,
-                                initialPage: 0,
-                                autoPlay: true,
-                                height: 150,
-                                onPageChanged:
-                                    (int i, carouselPageChangedReason) {
-                                  setState(() {
-                                    _index = i;
-                                  });
-                                })),
-                      );
+                  padding: const EdgeInsets.only(top: 4),
+                  child: CarouselSlider.builder(
+                      itemCount: snapShot.data.length,
+                      itemBuilder: (context, int index) {
+                        DocumentSnapshot sliderImage =
+                        snapShot.data[index];
+                        Map getImage = sliderImage.data();
+                        return SizedBox(
+                            width: MediaQuery.of(context).size.width,
+                            child: Image.network(
+                              getImage['image'],
+                              fit: BoxFit.fill,
+                            ));
+                      },
+                      options: CarouselOptions(
+                          viewportFraction: 1,
+                          initialPage: 0,
+                          autoPlay: true,
+                          height: 150,
+                          onPageChanged:
+                              (int i, carouselPageChangedReason) {
+                            setState(() {
+                              _index = i;
+                            });
+                          })),
+                );
               },
             ),
           if (_dataLength != 0)

@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:shapeyou/Screen/landing_screen.dart';
 import 'package:shapeyou/Screen/main_screen.dart';
 import 'package:shapeyou/services/user_services.dart';
+
+dart';
 import 'location_provider.dart';
 
 class AuthProvider with ChangeNotifier {

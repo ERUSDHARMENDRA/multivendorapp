@@ -160,4 +160,3 @@ class VendorAppBar extends StatelessWidget {
 //all working perfectly.
 
 //if u have a good suggestions regarding vendor details in silver app bar, Please commend
-

@@ -180,11 +180,9 @@ class _CouponWidgetState extends State<CouponWidget> {
               FlatButton(
                 child: Text(
                   'OK',
-                  style: TextStyle(color: Theme
-                      .of(context)
-                      .primaryColor,
-                      fontWeight: FontWeight.bold
-                  ),
+                  style: TextStyle(
+                      color: Theme.of(context).primaryColor,
+                      fontWeight: FontWeight.bold),
                 ),
                 onPressed: () {
                   Navigator.pop(context);

@@ -11,7 +11,6 @@ class FeaturedProducts extends StatelessWidget {
     ProductServices _services = ProductServices();
     var _store = Provider.of<StoreProvider>(context);
 
-
     return FutureBuilder<QuerySnapshot>(
       future: _services.products
           .where('published', isEqualTo: true)
@@ -41,10 +40,7 @@ class FeaturedProducts extends StatelessWidget {
                 elevation: 4,
                 borderRadius: BorderRadius.circular(4),
                 child: Container(
-                  width: MediaQuery
-                      .of(context)
-                      .size
-                      .width,
+                  width: MediaQuery.of(context).size.width,
                   height: 46,
                   decoration: BoxDecoration(
                       color: Colors.teal[100],

@@ -145,4 +145,3 @@ class _VendorCategoriesState extends State<VendorCategories> {
         });
   }
 }
-

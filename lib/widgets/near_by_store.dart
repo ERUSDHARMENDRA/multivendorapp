@@ -9,6 +9,8 @@ import 'package:provider/provider.dart';
 import 'package:shapeyou/provider/cart_provider.dart';
 import 'package:shapeyou/provider/store_provider.dart';
 import 'package:shapeyou/services/store_services.dart';
+
+ces.dart';
 import '../constants.dart';
 
 class NearByStores extends StatefulWidget {
