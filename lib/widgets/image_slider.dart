@@ -41,35 +41,35 @@ class _ImageSliderState extends State<ImageSlider> {
               builder: (_, snapShot) {
                 return snapShot.data == null
                     ? Center(
-                  child: CircularProgressIndicator(),
-                )
+                        child: CircularProgressIndicator(),
+                      )
                     : Padding(
-                  padding: const EdgeInsets.only(top: 4),
-                  child: CarouselSlider.builder(
-                      itemCount: snapShot.data.length,
-                      itemBuilder: (context, int index) {
-                        DocumentSnapshot sliderImage =
-                        snapShot.data[index];
-                        Map getImage = sliderImage.data();
-                        return SizedBox(
-                            width: MediaQuery.of(context).size.width,
-                            child: Image.network(
-                              getImage['image'],
-                              fit: BoxFit.fill,
-                            ));
-                      },
-                      options: CarouselOptions(
-                          viewportFraction: 1,
-                          initialPage: 0,
-                          autoPlay: true,
-                          height: 150,
-                          onPageChanged:
-                              (int i, carouselPageChangedReason) {
-                            setState(() {
-                              _index = i;
-                            });
-                          })),
-                );
+                        padding: const EdgeInsets.only(top: 4),
+                        child: CarouselSlider.builder(
+                            itemCount: snapShot.data.length,
+                            itemBuilder: (context, int index) {
+                              DocumentSnapshot sliderImage =
+                                  snapShot.data[index];
+                              Map getImage = sliderImage.data();
+                              return SizedBox(
+                                  width: MediaQuery.of(context).size.width,
+                                  child: Image.network(
+                                    getImage['image'],
+                                    fit: BoxFit.fill,
+                                  ));
+                            },
+                            options: CarouselOptions(
+                                viewportFraction: 1,
+                                initialPage: 0,
+                                autoPlay: true,
+                                height: 150,
+                                onPageChanged:
+                                    (int i, carouselPageChangedReason) {
+                                  setState(() {
+                                    _index = i;
+                                  });
+                                })),
+                      );
               },
             ),
           if (_dataLength != 0)
