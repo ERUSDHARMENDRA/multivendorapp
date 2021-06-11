@@ -146,5 +146,3 @@ class _VendorCategoriesState extends State<VendorCategories> {
   }
 }
 
-//commend your feedback about this part
-//thanks you.

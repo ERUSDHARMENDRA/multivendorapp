@@ -9,7 +9,7 @@ import 'package:provider/provider.dart';
 import 'package:shapeyou/provider/cart_provider.dart';
 import 'package:shapeyou/provider/store_provider.dart';
 import 'package:shapeyou/services/store_services.dart';
-import 'package:shapeyou/widgets/constants.dart';
+import '../constants.dart';
 
 class NearByStores extends StatefulWidget {
   @override
@@ -140,7 +140,7 @@ class _NearByStoresState extends State<NearByStores> {
                           padding: const EdgeInsets.only(
                               left: 8, right: 8, bottom: 10),
                           child: Text(
-                            'Find Out quality products near you',
+                            'Findout quality products near you',
                             style: TextStyle(fontSize: 12, color: Colors.grey),
                           ),
                         ),
@@ -163,7 +163,7 @@ class _NearByStoresState extends State<NearByStores> {
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(4),
                                   child: Image.network(
-                                    document['ImageUrl'],
+                                    document['imageUrl'],
                                     fit: BoxFit.cover,
                                   ),
                                 ),

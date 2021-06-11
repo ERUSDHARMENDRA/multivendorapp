@@ -41,7 +41,7 @@ class _CouponWidgetState extends State<CouponWidget> {
                         border: InputBorder.none,
                         filled: true,
                         fillColor: Colors.grey[300],
-                        hintText: 'Enter Coupon Code',
+                        hintText: 'Enter Voucher Code',
                         hintStyle: TextStyle(color: Colors.grey),
                       ),
                       onChanged: (String value) {
@@ -180,9 +180,11 @@ class _CouponWidgetState extends State<CouponWidget> {
               FlatButton(
                 child: Text(
                   'OK',
-                  style: TextStyle(
-                      color: Theme.of(context).primaryColor,
-                      fontWeight: FontWeight.bold),
+                  style: TextStyle(color: Theme
+                      .of(context)
+                      .primaryColor,
+                      fontWeight: FontWeight.bold
+                  ),
                 ),
                 onPressed: () {
                   Navigator.pop(context);
@@ -193,3 +195,5 @@ class _CouponWidgetState extends State<CouponWidget> {
         });
   }
 }
+
+//next open Vendor app, to add coupons

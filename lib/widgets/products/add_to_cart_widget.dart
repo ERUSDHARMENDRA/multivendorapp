@@ -31,7 +31,7 @@ class _AddToCartWidgetState extends State<AddToCartWidget> {
 
   getCartData() async {
     final snapshot =
-        await _cart.cart.doc(user.uid).collection('products').get();
+    await _cart.cart.doc(user.uid).collection('products').get();
     if (snapshot.docs.length == 0) {
       //means this product not added to cart
       setState(() {

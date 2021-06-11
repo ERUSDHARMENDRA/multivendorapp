@@ -6,6 +6,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 class SaveForLater extends StatelessWidget {
   final DocumentSnapshot document;
+
   SaveForLater(this.document); //shortcut to add constructor (fn+alt+insert)
 
   @override

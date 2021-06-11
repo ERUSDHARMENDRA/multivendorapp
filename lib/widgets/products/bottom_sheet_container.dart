@@ -6,7 +6,6 @@ import 'add_to_cart_widget.dart';
 
 class BottomSheetContainer extends StatefulWidget {
   final DocumentSnapshot document;
-
   BottomSheetContainer(this.document);
 
   @override

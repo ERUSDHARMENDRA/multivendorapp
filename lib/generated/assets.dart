@@ -10,5 +10,4 @@ class Assets {
   static const String imagesLogo = 'images/logo.png';
   static const String imagesMarker = 'images/marker.png';
   static const String imagesOrderfood = 'images/orderfood.png';
-  static const String imagesShapeyouLogo = 'images/shapeyou_logo.png';
 }

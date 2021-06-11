@@ -204,5 +204,3 @@ class _MapScreenState extends State<MapScreen> {
     );
   }
 }
-
-// now will go back to Admin Web

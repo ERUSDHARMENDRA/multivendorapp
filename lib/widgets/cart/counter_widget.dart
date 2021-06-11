@@ -7,7 +7,6 @@ class CounterWidget extends StatefulWidget {
   final DocumentSnapshot document;
   final String docId;
   final int qty;
-
   CounterWidget({this.document, this.qty, this.docId});
 
   @override

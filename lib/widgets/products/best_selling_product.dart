@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shapeyou/provider/store_provider.dart';
 import 'package:shapeyou/services/product_services.dart';
-import 'package:shapeyou/widgets/products/product_card_widget.dart';
+
+import 'product_card_widget.dart';
 
 class BestSellingProduct extends StatelessWidget {
   @override

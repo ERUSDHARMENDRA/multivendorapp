@@ -6,7 +6,6 @@ import 'cart_card.dart';
 
 class CartList extends StatefulWidget {
   final DocumentSnapshot document;
-
   CartList({this.document});
 
   @override

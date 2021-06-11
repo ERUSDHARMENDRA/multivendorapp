@@ -3,21 +3,23 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shapeyou/provider/store_provider.dart';
 import 'package:shapeyou/services/product_services.dart';
+import 'package:shapeyou/widgets/products/product_card_widget.dart';
 
-import 'product_card_widget.dart';
-
-class RecentlyAddedProducts extends StatelessWidget {
+class FeaturedProducts extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ProductServices _services = ProductServices();
     var _store = Provider.of<StoreProvider>(context);
 
+
     return FutureBuilder<QuerySnapshot>(
       future: _services.products
           .where('published', isEqualTo: true)
-          .where('collection', isEqualTo: 'Recently Added')
+          .where('collection', isEqualTo: 'Featured Products')
           .where('seller.sellerUid', isEqualTo: _store.storedetails['uid'])
           .get(),
+      //dont have enough data
+      //this will show only last 10 products
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (snapshot.hasError) {
           return Text('Something went wrong');
@@ -26,6 +28,7 @@ class RecentlyAddedProducts extends StatelessWidget {
         if (!snapshot.hasData) {
           return Container();
         }
+
         if (snapshot.data.docs.isEmpty) {
           return Container(); //if no data
         }
@@ -38,13 +41,16 @@ class RecentlyAddedProducts extends StatelessWidget {
                 elevation: 4,
                 borderRadius: BorderRadius.circular(4),
                 child: Container(
-                  width: MediaQuery.of(context).size.width,
+                  width: MediaQuery
+                      .of(context)
+                      .size
+                      .width,
                   height: 46,
                   decoration: BoxDecoration(
                       color: Colors.teal[100],
                       borderRadius: BorderRadius.circular(4)),
                   child: Center(
-                    child: Text('Recently Added',
+                    child: Text('Featured Products',
                         style: TextStyle(
                             shadows: <Shadow>[
                               Shadow(

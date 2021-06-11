@@ -1,28 +1,34 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
-import 'package:carousel_slider/carousel_slider.dart';
+import 'package:provider/provider.dart';
+import 'package:shapeyou/provider/store_provider.dart';
 
-class ImageSlider extends StatefulWidget {
+class VendorBanner extends StatefulWidget {
   @override
-  _ImageSliderState createState() => _ImageSliderState();
+  _VendorBannerState createState() => _VendorBannerState();
 }
 
-class _ImageSliderState extends State<ImageSlider> {
-
+class _VendorBannerState extends State<VendorBanner> {
   int _index = 0;
   int _dataLength = 1;
 
   @override
-  void initState() {
-    getSliderImageFromDb();
-    super.initState();
+  void didChangeDependencies() {
+    //here we can use context
+    var _storeProvider = Provider.of<StoreProvider>(context);
+    getBannerImageFromDb(_storeProvider);
+
+    super.didChangeDependencies();
   }
 
-
-  Future getSliderImageFromDb() async {
+  Future getBannerImageFromDb(StoreProvider storeProvider) async {
     var _fireStore = FirebaseFirestore.instance;
-    QuerySnapshot snapshot = await _fireStore.collection('slider').get();
+    QuerySnapshot snapshot = await _fireStore
+        .collection('vendorbanner')
+        .where('sellerUid', isEqualTo: storeProvider.storedetails['uid'])
+        .get();
     if (mounted) {
       setState(() {
         _dataLength = snapshot.docs.length;
@@ -31,16 +37,18 @@ class _ImageSliderState extends State<ImageSlider> {
     return snapshot.docs;
   }
 
-
   @override
   Widget build(BuildContext context) {
+    //now we need to get banner only from selected vendor
+    //currently we have only 1 vendor with banner
+    var _storeProvider = Provider.of<StoreProvider>(context);
     return Container(
       color: Colors.white,
       child: Column(
         children: [
           if (_dataLength != 0)
             FutureBuilder(
-              future: getSliderImageFromDb(),
+              future: getBannerImageFromDb(_storeProvider),
               builder: (_, snapShot) {
                 return snapShot.data == null
                     ? Center(
@@ -57,7 +65,7 @@ class _ImageSliderState extends State<ImageSlider> {
                               return SizedBox(
                                   width: MediaQuery.of(context).size.width,
                                   child: Image.network(
-                                    getImage['image'],
+                                    getImage['imageUrl'],
                                     fit: BoxFit.fill,
                                   ));
                             },
@@ -65,7 +73,7 @@ class _ImageSliderState extends State<ImageSlider> {
                                 viewportFraction: 1,
                                 initialPage: 0,
                                 autoPlay: true,
-                                height: 150,
+                                height: 180,
                                 onPageChanged:
                                     (int i, carouselPageChangedReason) {
                                   setState(() {
@@ -91,5 +99,3 @@ class _ImageSliderState extends State<ImageSlider> {
     );
   }
 }
-
-//restart app
